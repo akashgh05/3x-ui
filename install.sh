@@ -55,10 +55,9 @@ elif [[ "${release}" == "fedora" ]]; then
     fi
 
 elif [[ "${release}" == "debian" ]]; then
-    if [[ ${os_version} -lt 10 ]]; then
-        echo -e "${red} Please use Debian 10 or higher ${plain}\n" && exit 1
+    if [[ ${os_version} -lt 11 ]]; then
+        echo -e "${red} Please use Debian 11 or higher ${plain}\n" && exit 1
     fi
-
 elif [[ "${release}" == "almalinux" ]]; then
     if [[ ${os_version} -lt 9 ]]; then
         echo -e "${red} Please use AlmaLinux 9 or higher ${plain}\n" && exit 1
@@ -87,11 +86,14 @@ install_base() {
     fedora)
         dnf -y update && dnf install -y -q wget curl tar tzdata
         ;;
+    debian)
+        apt-get update && apt install -y -q wget curl tar tzdata
+        ;;
     arch | manjaro)
         pacman -Syu && pacman -Syu --noconfirm wget curl tar tzdata
         ;;
     *)
-        apt-get update && apt install -y -q wget curl tar tzdata
+        echo -e "${red}Unsupported distribution!${plain}" && exit 1
         ;;
     esac
 }
